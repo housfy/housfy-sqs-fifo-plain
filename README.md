@@ -45,17 +45,13 @@ Configure a new queue connector on `config/queue.php`
 ```php
     'connections' => [
     //...
-    'sqs-fifo' => [
-            'driver' => 'sqs-fifo',
+    'sqs-fifo-plain' => [
+            'driver' => 'sqs-fifo-plain',
             'key'    => env('AWS_SQS_KEY', ''),
             'secret' => env('AWS_SQS_SECRET', ''),
-            'prefix' => env('AWS_SQS_PREFIX'),
-            'suffix' => env('SQS_SUFFIX'),
-            'queue'  => 'myqueue.fifo',
+            'prefix' => env('AWS_SQS_PREFIX', 'https://sqs.us-east-1.amazonaws.com/your-account-id'),
+            'queue'  => 'poc-group-id.fifo',
             'region' => 'eu-west-1',
-            'group' => 'default',
-            'deduplicator' => 'unique',
-            'allow_delay' => env('SQS_ALLOW_DELAY'),
         ],
       ]
 ```
