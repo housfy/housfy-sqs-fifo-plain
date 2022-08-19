@@ -1,0 +1,44 @@
+{
+  "name": "housfy/sqs-fifo-plain",
+  "description": "Integration to work with SQS FIFO sending payloads of standard json:api",
+  "keywords": [
+    "housfy",
+    "laravel",
+    "sqs-fifo-plain"
+  ],
+  "homepage": "https://github.com/housfy/housfy-sqs-fifo-plain",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Housfy",
+      "email": "tech@housfy.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "aws/aws-sdk-php": "~3.0",
+    "illuminate/queue": ">=4.1",
+    "illuminate/support": ">=4.1",
+    "ramsey/uuid": ">=3.0"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Housfy\\SqsFifoPlain\\": "src"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Housfy\\SqsFifoPlain\\LaravelServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
