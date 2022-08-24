@@ -4,6 +4,17 @@ This package send a plain payload to an SQS FIFO then processes it using an assi
 
 ## How to use it?
 
+### WAIT!
+
+**BEFORE** you jump into integrating this packge you must know 2 things about this package:
+- The messages on the SQS queue **will not be deleted** from the queue if the processing of the job fails.
+- This packages assumes that you are using "Dead Letter Queues" (to which messages that fail 5 times will be moved to)
+and as so you should run the following command 
+to consume messages:
+  - `php artisan sqsqueue:work --tries=5 --backoff=32`
+
+If all of that is ok with you the please continue with the setup, by following the instruction below.
+
 Add the following lines to your composer.json file:
 
 ```
@@ -50,7 +61,7 @@ Configure a new queue connector on `config/queue.php`
             'key'    => env('AWS_SQS_KEY', ''),
             'secret' => env('AWS_SQS_SECRET', ''),
             'prefix' => env('AWS_SQS_PREFIX', 'https://sqs.us-east-1.amazonaws.com/your-account-id'),
-            'queue'  => 'poc-group-id.fifo',
+            'queue'  => 'queue-name.fifo',
             'region' => 'eu-west-1',
         ],
       ]
