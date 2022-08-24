@@ -15,7 +15,7 @@ class WorkCommand extends BaseWorkCommand
      *
      * @var string
      */
-    protected $signature = 'queue:work
+    protected $signature = 'sqsqueue:work
                             {connection? : The name of the queue connection to work}
                             {--name=default : The name of the worker}
                             {--queue= : The names of the queues to work}
