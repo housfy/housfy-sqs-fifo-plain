@@ -4,10 +4,65 @@ This package send a plain payload to an SQS FIFO then processes it using an assi
 
 ## How to use it?
 
+### How do I dispatch an event?
+
+In order to dispatch an event you must do the following
+
+**From a Controller**
+```php
+use Housfy\SqsFifoPlain\Jobs\DispatcherPlainSqsFifoJob;
+use Ramsey\Uuid\Uuid;
+
+// ...
+
+$payload = [
+    'msg' => 'Hello World',
+];
+
+$type = 'customName.versionNumber.actionName'
+$groupName = 'myGroup';
+// The connectionName must be the same name that you used on the config/queue.php file
+$connectionName= "sqs-fifo-plain";
+
+$job = (new DispatcherPlainSqsFifoJob())
+                    ->setId(Uuid::uuid1())
+                    ->setType($type)
+                    ->setAttributes($payload)
+                    ->setGroup($groupName)
+                    ->onConnection($connectionName);
+
+$this->dispatch($job);
+```
+
+That will dispatch the following message to SQS FIFO queue:
+
+```json
+{
+  "data": {
+    "id": "2ee2bfd4-2555-11ed-9269-0242ac120008",
+    "type": "customName.versionNumber.actionName",
+    "occurred_on": "2022-08-26 15:38:52",
+    "attributes": {
+      "msg": "Hello world"
+    },
+    "meta": {
+      "host": "80db1d09839a",
+      "ip": "172.18.0.8"
+    }
+  },
+  "group": "myGroup"
+}
+```
+
+The message will be properly stored on fifo under the group that you specify!.
+
+## Installation and configuration
+
 ### WAIT!
 
-**BEFORE** you jump into integrating this packge you must know 2 things about this package:
-- The messages on the SQS queue **will not be deleted** from the queue if the processing of the job fails.
+**BEFORE** you jump into integrating this package you must know these things:
+- The messages **will not be deleted** from the queue if the processing fails.
+- To mark job as fail you must explicit set `$this->job->markAsFailed();` on your Job handler and throw an exception.
 - This packages assumes that you are using "Dead Letter Queues" (to which messages that fail 5 times will be moved to)
 and as so you should run the following command 
 to consume messages:
@@ -39,7 +94,7 @@ Register the service provider
 
 'providers' => [
     '...',
-    'Housfy\SqsFifoPlain\LaravelServiceProvider::class',
+    Housfy\SqsFifoPlain\LaravelServiceProvider::class,
 ];
 ```
 

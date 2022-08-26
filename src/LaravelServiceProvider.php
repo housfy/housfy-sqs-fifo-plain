@@ -7,8 +7,6 @@ namespace Housfy\SqsFifoPlain;
 
 use Housfy\SqsFifoPlain\Sqs\Connector;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Queue\Events\JobProcessed;
 
 /**
  * Class CustomQueueServiceProvider
@@ -24,12 +22,8 @@ class LaravelServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/sqs-fifo-plain.php' => config_path('sqs-fifo-plain.php')
+            __DIR__ . '/config/sqs-fifo-plain.php' => config_path('sqs-fifo-plain.php')
         ]);
-
-        Queue::after(function (JobProcessed $event) {
-            $event->job->delete();
-        });
 
         if ($this->app->runningInConsole()) {
             $this->commands([
