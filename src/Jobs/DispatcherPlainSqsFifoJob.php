@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Housfy\SqsFifoPlain\Jobs;
 
 use Carbon\Carbon;
+use Housfy\SqsFifoPlain\Bus\SqsFifoQueueable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -12,7 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class DispatcherPlainSqsFifoJob implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels, SqsFifoQueueable;
 
     private string $id;
     private string $type;

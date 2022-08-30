@@ -6,7 +6,7 @@
  */
 return [
     'handlers' => [
-        'queueName' => App\Jobs\QueueNameHandlerJob::class,
+        'queueName.fifo' => App\Jobs\QueueNameHandlerJob::class,
     ],
 
     'default-handler' => App\Jobs\DefaultHandlerJob::class

@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Housfy\SqsFifoPlain\Bus;
 
-trait SqsFifoPlainQueueable
+trait SqsFifoQueueable
 {
     /**
      * The message group id the job should be sent to.
