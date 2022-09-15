@@ -98,7 +98,7 @@ class DispatcherPlainSqsFifoJob implements ShouldQueue
     public function getPayload(): array
     {
         if (is_null($this->ocurred_on)) {
-            $this->ocurred_on = Carbon::now()->format('Y-m-d H:i:s');
+            $this->ocurred_on = Carbon::now('UTC')->format('Y-m-d H:i:s');
         }
 
         $meta = array_merge(
