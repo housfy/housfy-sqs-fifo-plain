@@ -8,7 +8,6 @@ This package send a plain payload to an SQS FIFO then processes it using an assi
 
 In order to dispatch an event you must do the following
 
-**From a Controller**
 ```php
 use Housfy\SqsFifoPlain\Jobs\DispatcherPlainSqsFifoJob;
 use Ramsey\Uuid\Uuid;
@@ -24,14 +23,14 @@ $groupName = 'myGroup';
 // The connectionName must be the same name that you used on the config/queue.php file
 $connectionName= "sqs-fifo-plain";
 
-$job = (new DispatcherPlainSqsFifoJob())
-                    ->setId(Uuid::uuid1())
-                    ->setType($type)
-                    ->setAttributes($payload)
-                    ->setGroup($groupName)
-                    ->onConnection($connectionName);
+$sqsValueObject = (new PlainSqsFifoValueObject())
+            ->setId(Uuid::uuid1())
+            ->setType($type)
+            ->setAttributes($payload)
+            ->setGroup($groupName)
+            ->setConnection($connectionName);
 
-$this->dispatch($job);
+ DispatcherPlainSqsFifoJob::dispatch($sqsValueObject);
 ```
 
 That will dispatch the following message to SQS FIFO queue:

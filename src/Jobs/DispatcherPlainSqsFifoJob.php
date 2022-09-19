@@ -6,99 +6,29 @@ namespace Housfy\SqsFifoPlain\Jobs;
 
 use Carbon\Carbon;
 use Housfy\SqsFifoPlain\Bus\SqsFifoQueueable;
+use Housfy\SqsFifoPlain\Support\PlainSqsFifoValueObject;
 use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class DispatcherPlainSqsFifoJob implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels, SqsFifoQueueable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, SqsFifoQueueable;
+    
+    protected PlainSqsFifoValueObject $plainSqsFifoValueObject;
 
-    private string $id;
-    private string $type;
-    private array $attributes;
-    private string $group = "default";
-    private array $meta = [];
-    private ?string $ocurred_on = null;
-
-    public function __construct()
+    public function __construct(PlainSqsFifoValueObject $plainSqsFifoValueObject)
     {
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function setId(string $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function getOcurredOn(): string
-    {
-        return $this->ocurred_on;
-    }
-
-    public function setOcurredOn(string $ocurred_on): self
-    {
-        $this->ocurred_on = $ocurred_on;
-        return $this;
-    }
-
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    public function setAttributes(array $attributes): self
-    {
-        $this->attributes = $attributes;
-
-        return $this;
-    }
-
-    public function getMeta(): array
-    {
-        return $this->meta;
-    }
-
-    public function setMeta(array $meta): self
-    {
-        $this->meta = $meta;
-        return $this;
-    }
-
-    public function getGroup()
-    {
-        return $this->group;
-    }
-
-    public function setGroup($group): self
-    {
-        $this->group = $group;
-        return $this;
+        $this->plainSqsFifoValueObject = $plainSqsFifoValueObject;
+        $this->onConnection($plainSqsFifoValueObject->connection());
     }
 
     public function getPayload(): array
     {
-        if (is_null($this->ocurred_on)) {
-            $this->ocurred_on = Carbon::now('UTC')->format('Y-m-d H:i:s');
+        if (is_null($this->plainSqsFifoValueObject->occurredOn())) {
+            $this->plainSqsFifoValueObject->setOccurredOn(Carbon::now('UTC')->format('Y-m-d H:i:s'));
         }
 
         $meta = array_merge(
@@ -106,19 +36,19 @@ class DispatcherPlainSqsFifoJob implements ShouldQueue
                 "host" => getHostName(),
                 "ip" => getHostByName(getHostName())
             ],
-            $this->meta
+            $this->plainSqsFifoValueObject->meta()
         );
 
         $payload = [
             "data" => [
-                "id" => $this->id,
-                "type" => $this->type,
-                "occurred_on" => $this->ocurred_on,
-                "attributes" => $this->attributes,
+                "id" => $this->plainSqsFifoValueObject->id(),
+                "type" => $this->plainSqsFifoValueObject->type(),
+                "occurred_on" => $this->plainSqsFifoValueObject->occurredOn(),
+                "attributes" => $this->plainSqsFifoValueObject->attributes(),
                 "meta" => $meta,
             ],
             // Needed to have messages separated by groups
-            "group" => $this->group
+            "group" => $this->plainSqsFifoValueObject->group()
         ];
 
         return $payload;
