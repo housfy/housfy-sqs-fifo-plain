@@ -23,12 +23,7 @@ $groupName = 'myGroup';
 // The connectionName must be the same name that you used on the config/queue.php file
 $connectionName= "sqs-fifo-plain";
 
-$sqsValueObject = (new PlainSqsFifoValueObject())
-            ->setId(Uuid::uuid1())
-            ->setType($type)
-            ->setAttributes($payload)
-            ->setGroup($groupName)
-            ->setConnection($connectionName);
+$sqsValueObject = (new PlainSqsFifoValueObject(Uuid::uuid1(), $type, $payload, $groupName, $connectionName));
 
  DispatcherPlainSqsFifoJob::dispatch($sqsValueObject);
 ```
