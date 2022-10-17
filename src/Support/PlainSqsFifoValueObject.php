@@ -29,17 +29,17 @@ class PlainSqsFifoValueObject
         string $type,
         array $attributes,
         string $group = "default",
+        ?string $connection = null,
         array $meta = [],
-        ?string $occurred_on = null,
-        ?string $connection = null
+        ?string $occurred_on = null
     ) {
         $this->id = $id;
         $this->type = $type;
         $this->attributes = $attributes;
         $this->group = $group;
+        $this->connection = $connection;
         $this->meta = $meta;
         $this->occurred_on = $occurred_on;
-        $this->connection = $connection;
     }
 
     public function id(): string
