@@ -14,7 +14,34 @@ class PlainSqsFifoValueObject
     private array $meta = [];
     private ?string $occurred_on = null;
     private ?string $connection = null;
-    
+
+    /**
+     * @param string $id
+     * @param string $type
+     * @param array $attributes
+     * @param string $group
+     * @param array $meta
+     * @param string|null $occurred_on
+     * @param string|null $connection
+     */
+    public function __construct(
+        string $id,
+        string $type,
+        array $attributes,
+        string $group = "default",
+        array $meta = [],
+        ?string $occurred_on = null,
+        ?string $connection = null
+    ) {
+        $this->id = $id;
+        $this->type = $type;
+        $this->attributes = $attributes;
+        $this->group = $group;
+        $this->meta = $meta;
+        $this->occurred_on = $occurred_on;
+        $this->connection = $connection;
+    }
+
     public function id(): string
     {
         return $this->id;
