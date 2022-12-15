@@ -57,6 +57,12 @@ class PlainSqsFifoValueObject
         return $this->occurred_on;
     }
 
+    public function setOccurredOn(string $occurred_on): self
+    {
+        $this->ocurred_on = $occurred_on;
+        return $this;
+    }
+
     public function attributes(): array
     {
         return $this->attributes;
