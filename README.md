@@ -1,3 +1,6 @@
+¡¡¡NO ARCHIVAR NI HACER PRIVADO!!!!
+
+
 # SQS FIFO PLAIN
 
 This package send a plain payload to an SQS FIFO then processes it using an assigned Job via the config.
