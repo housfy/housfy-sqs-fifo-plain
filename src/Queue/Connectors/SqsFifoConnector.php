@@ -55,7 +55,7 @@ class SqsFifoConnector extends SqsConnector
     protected function getDefaultConfiguration(array $config)
     {
         // Laravel >= 5.1 has the "getDefaultConfiguration" method.
-        if (method_exists(get_parent_class(), 'getDefaultConfiguration')) {
+        if (method_exists(get_parent_class($this), 'getDefaultConfiguration')) {
             return parent::getDefaultConfiguration($config);
         }
 
